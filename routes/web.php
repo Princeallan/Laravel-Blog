@@ -15,6 +15,15 @@ Route::get('/', 'PostController@index');
 
 Route::resource('posts', 'PostController');
 
+Route::get('/send/email', 'HomeController@mail');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/subscribers', function () {
+    $data = '';
+    return view('mails.subscribers',['message'=> $data]);
+});
+Route::post('/send', 'EmailController@send');
+
