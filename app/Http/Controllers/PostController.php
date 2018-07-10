@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Database\Eloquent\Collection;
 use App\Post;
 
 class PostController extends Controller
@@ -14,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-         $posts = Post::all();
+         $posts = Post::orderBy('created_at','desc')->get();
 
         return view('index', [ 'posts' => $posts ]);
     }
@@ -58,7 +60,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+         $post = Post::find($id)->first();
+
+        // show the view and pass the nerd to it
+        return View('post.blogdetails')->with('post', $post);
     }
 
     /**
