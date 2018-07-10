@@ -13,6 +13,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Post');
     }
+    public function  setNameAttribute($value){
+        $this->attributes['name']= strtolower($value);
+    }
 
     /**
      * The attributes that are mass assignable.

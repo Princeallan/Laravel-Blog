@@ -13,7 +13,10 @@ class PostRepository
     public function Create($request)
     {
         $post = new Post();
-
+        $post->title = $request['title'];
+        $post->body = $request['body'];
+        $post->user_id= auth()->id();
+        $post->save();
 
     }
 

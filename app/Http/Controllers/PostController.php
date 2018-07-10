@@ -14,15 +14,16 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $postRepo;
+
     public function __construct(PostRepository $postRepository)
     {
-        $this->postRepo=$postRepository;
+        $this->postRepo = $postRepository;
     }
 
     public function index()
     {
 //        $posts = Post::orderBy('created_at', 'desc')->paginate(4)->all();
-        $posts=$this->postRepo->getAll();
+        $posts = $this->postRepo->getAll();
         return view('index', ['posts' => $posts]);
     }
 
@@ -48,12 +49,7 @@ class PostController extends Controller
             'title' => 'required|max:255 ',
             'body' => 'required',
         ]);
-
-        $post = new Post();
-        $post->title = $request['title'];
-        $post->body = $request['body'];
-        $request->user()->posts()->save($post);
-
+        $this->postRepo->Create($request);
         return redirect()->route('home');
     }
 
