@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Database\Eloquent\Collection;
 use App\Post;
 
 class PostController extends Controller
@@ -14,11 +13,17 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $postRepo;
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepo=$postRepository;
+    }
+
     public function index()
     {
-         $posts = Post::orderBy('created_at','desc')->get();
-
-        return view('index', [ 'posts' => $posts ]);
+//        $posts = Post::orderBy('created_at', 'desc')->paginate(4)->all();
+        $posts=$this->postRepo->getAll();
+        return view('index', ['posts' => $posts]);
     }
 
     /**
@@ -34,33 +39,33 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $this->validate($request, [
-                'title' => 'required|max:255 ',
-                'body' => 'required',
+            'title' => 'required|max:255 ',
+            'body' => 'required',
         ]);
 
-            $post = new Post();
-            $post->title = $request['title'];
-            $post->body = $request['body'];
-            $request->user()->posts()->save($post);
+        $post = new Post();
+        $post->title = $request['title'];
+        $post->body = $request['body'];
+        $request->user()->posts()->save($post);
 
-            return redirect()->route('home');
+        return redirect()->route('home');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-         $post = Post::find($id)->first();
+        $post = Post::find($id)->first();
 
         // show the view and pass the nerd to it
         return View('post.blogdetails')->with('post', $post);
@@ -69,7 +74,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -80,8 +85,8 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -92,7 +97,7 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
