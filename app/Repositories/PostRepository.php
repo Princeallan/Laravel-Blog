@@ -6,9 +6,9 @@ use App\Post;
 
 class PostRepository
 {
-    public function __construct()
-    {
-    }
+//    public function __construct()
+//    {
+//    }
 
     public function create($request)
     {
