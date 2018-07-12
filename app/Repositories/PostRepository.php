@@ -18,6 +18,7 @@ class PostRepository
         $post->user_id= auth()->id();
         $post->save();
 
+        return $post;
     }
 
     public function getAll()

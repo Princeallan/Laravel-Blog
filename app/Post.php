@@ -22,9 +22,9 @@ class Post extends Model
     	return $this->belongsTo('App\User');
     }
 
-    public function  getTitleAttribute($value){
-        return  strtoupper($value);
-    }
+//    public function  getTitleAttribute($value){
+//        return  strtoupper($value);
+//    }
 
     public function scopeRemoved($query){
         return $query->withTrashed()->orderBy('deleted_at','desc');
