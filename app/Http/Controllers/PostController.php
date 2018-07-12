@@ -22,6 +22,7 @@ class PostController extends Controller
 
     public function index()
     {
+//        $posts = Post::removed();
 //        $posts = Post::orderBy('created_at', 'desc')->paginate(4)->all();
         $posts = $this->postRepo->getAll();
         return view('index', ['posts' => $posts]);
@@ -49,7 +50,7 @@ class PostController extends Controller
             'title' => 'required|max:255 ',
             'body' => 'required',
         ]);
-        $this->postRepo->Create($request);
+        $this->postRepo->create($request);
         return redirect()->route('home');
     }
 
@@ -64,7 +65,7 @@ class PostController extends Controller
         $post = Post::find($id)->first();
 
         // show the view and pass the nerd to it
-        return View('post.blogdetails')->with('post', $post);
+        return View('posts.show')->with('post', $post);
     }
 
     /**
@@ -75,7 +76,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -87,7 +89,9 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->update($request->all());
+        return redirect()->route('posts.show', ["id" => $post->id]);
     }
 
     /**
@@ -98,6 +102,13 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $post = $this->postRepo->getOnePost($id);
+
+        //check correct user
+
+        $post->delete();
+        return redirect('/home')->with('success', 'Post Removed ');
+
     }
 }

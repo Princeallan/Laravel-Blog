@@ -10,7 +10,7 @@ class PostRepository
     {
     }
 
-    public function Create($request)
+    public function create($request)
     {
         $post = new Post();
         $post->title = $request['title'];
@@ -24,6 +24,11 @@ class PostRepository
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(4)->all();
         return $posts;
+    }
+
+    public function getOnePost($id){
+        // get one post
+        return Post::find($id);
     }
 
 }

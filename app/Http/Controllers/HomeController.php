@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailable;
+use App\Repositories\PostRepository;
 
 class HomeController extends Controller
 {
@@ -13,9 +14,15 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+
+    private $postRepo;
+
+    public function __construct(PostRepository $postRepository)
     {
         $this->middleware('auth');
+        $this->postRepo = $postRepository;
+
+
     }
 
     /**
@@ -25,7 +32,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $posts = $this->postRepo->getAll();
+        return view('home', ['posts' => $posts]);
     }
 
     public function mail()

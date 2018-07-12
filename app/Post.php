@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     protected $fillable=[
     		'title',
     		'body',
@@ -18,7 +23,10 @@ class Post extends Model
     }
 
     public function  getTitleAttribute($value){
-        return   strtoupper($value);
+        return  strtoupper($value);
     }
 
+    public function scopeRemoved($query){
+        return $query->withTrashed()->orderBy('deleted_at','desc');
+    }
 }
