@@ -15,12 +15,15 @@ class AllanTest extends TestCase
     /** @test */
     function it_can_get_post_by_id()
     {
-        $postRepo = new PostRepository();
-
-        $post = $postRepo->getOnePost(4);
+        $post = factory(Post::class)->create();
         dd($post);
+        $postRepo = new PostRepository();
+//
+        $post = $postRepo->getOnePost(1);
+
         $this->assertInstanceOf(Post::class, $post);
 //        $this->assertEquals(2, $post->count());
+
     }
 
 }
